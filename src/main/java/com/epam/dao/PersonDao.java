@@ -76,8 +76,6 @@ public class PersonDao implements PersonDaoInterface {
                 return true;
             }
 
-            ps.close();
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -132,4 +130,29 @@ public class PersonDao implements PersonDaoInterface {
         return false;
     }
 
+    @Override
+    public int getId(Person person) {
+        Connection cn = ConnectionFactory.getConnection();
+
+        try {
+            PreparedStatement ps = cn.prepareStatement("SELECT id FROM persons WHERE name=? AND surname=? AND email=?" +
+                    " AND type=?");
+            ps.setString(1, person.getName());
+            ps.setString(2, person.getSurname());
+            ps.setString(3, person.getEmail());
+            ps.setString(4, String.valueOf(person.getTypeOfCategory()));
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int a = rs.getInt("id");
+                return a;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return 0;
+    }
 }

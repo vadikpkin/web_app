@@ -14,4 +14,6 @@ public interface PersonDaoInterface {
     boolean updatePerson(Person person, int id);
 
     boolean deletePerson(int id);
+
+    int getId(Person person);
 }
