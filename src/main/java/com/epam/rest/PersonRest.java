@@ -2,18 +2,16 @@ package com.epam.rest;
 
 import com.epam.dao.PersonDao;
 import com.epam.models.Person;
-import com.epam.models.Type;
+
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Set;
+
+//
 //1. Создать слой для сервиса, который будет дергать бд, дергать бд из реста - плохо
 //2. Попробывать создать с помощью реализации класса Апликейшн(Создаешь новый класс и экспендишь его, и web.
 // xml прописываешь path до твоего класса и в нем path)
-// 3. Если что то не так - выбрасывать 404 или 401....
-// 4. Попробывать сет, которывый возвращаю обернут в responceEntity и возвращать его + разобраться с методом getallv2!
-// log4j , slforg юзать
 
 @Path("/person")
 public class PersonRest {
