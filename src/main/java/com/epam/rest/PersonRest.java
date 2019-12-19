@@ -3,88 +3,66 @@ package com.epam.rest;
 import com.epam.dao.PersonDao;
 import com.epam.models.Person;
 import com.epam.models.Type;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Set;
-
+//1. Создать слой для сервиса, который будет дергать бд, дергать бд из реста - плохо
+//2. Попробывать создать с помощью реализации класса Апликейшн(Создаешь новый класс и экспендишь его, и web.
+// xml прописываешь path до твоего класса и в нем path)
+// 3. Если что то не так - выбрасывать 404 или 401....
+// 4. Попробывать сет, которывый возвращаю обернут в responceEntity и возвращать его + разобраться с методом getallv2!
+// log4j , slforg юзать
 
 @Path("/person")
 public class PersonRest {
 
+    private PersonDao dao = new PersonDao();
+
     @GET
-    @Path("get/{personId}")
+    @Path("/{personId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPerson(@PathParam("personId") int id) {
+    public Response getPersonJson(@PathParam("personId") int id) {
 
-        Person person = new PersonDao().getPerson(id);
+        if (dao.getPerson(id) == null)
 
-        ObjectMapper Obj = new ObjectMapper();
+            return Response.status(404).entity("no such person").build();
 
-        try {
-            String jsonStr = Obj.writeValueAsString(person);
-            return Response.status(200).entity(jsonStr).build();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        return Response.status(200).entity(dao.getPerson(id)).build();
 
-        return null;
     }
 
     @GET
-    @Path("/getall")
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAll() {
+    public Response getAll() {
 
-        PersonDao dao = new PersonDao();
+        return Response.status(200).entity(dao.getAllPersons()).build();
 
-        Set<Person> personSet = dao.getAllPersons();
-
-        ObjectMapper Obj = new ObjectMapper();
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        try {
-            for (Person person : personSet) {
-                stringBuilder.append(Obj.writeValueAsString(person));
-            }
-
-            return stringBuilder.toString();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
-    @GET
+    @POST
     @Path("/add")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String insertPerson(@QueryParam("name") String name, @QueryParam("surname") String surname,
-                               @QueryParam("email") String email, @QueryParam("type") String type) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response insertPerson(Person person) {
 
-        Person person = new Person(name, surname, email, Type.valueOf(type));
+        boolean isInserted = dao.insertPerson(person);
 
-        PersonDao dao = new PersonDao();
-
-        boolean insert = dao.insertPerson(person);
-
-        return insert ? "ADDED id: " + dao.getId(person) : "FAILED";
+        return isInserted ? Response.status(201).entity("added").build() :
+                Response.status(400).entity("failed").build();
     }
 
-    @GET
+    @DELETE
     @Path("delete/{personId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String deletePerson(@PathParam("personId") int id) {
-
-        PersonDao dao = new PersonDao();
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deletePerson(@PathParam("personId") int id) {
 
         boolean isDeleted = dao.deletePerson(id);
 
-        return String.valueOf(isDeleted);
+        return isDeleted ? Response.status(200).entity("deleted").build() :
+                Response.status(404).entity("failed").build();
 
     }
 }

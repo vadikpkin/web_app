@@ -20,8 +20,12 @@ public class PersonDao implements PersonDaoInterface {
             ResultSet rs = st.executeQuery("SELECT * FROM persons WHERE id=" + id);
 
             while (rs.next()) {
-                return new Person(rs.getString("name"), rs.getString("surname"), rs.getString("email"),
-                        Type.valueOf(rs.getString("type")));
+                Person person = new Person();
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setEmail(rs.getString("email"));
+                person.setTypeOfCategory(Type.valueOf(rs.getString("type")));
+                return person;
             }
 
 
@@ -44,8 +48,13 @@ public class PersonDao implements PersonDaoInterface {
             Set<Person> personSet = new HashSet<>();
 
             while (rs.next()) {
-                Person person = new Person(rs.getString("name"), rs.getString("surname"), rs.getString("email"),
-                        Type.valueOf(rs.getString("type")));
+                Person person = new Person();
+
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setEmail(rs.getString("email"));
+                person.setTypeOfCategory(Type.valueOf(rs.getString("type")));
+
                 personSet.add(person);
             }
 
