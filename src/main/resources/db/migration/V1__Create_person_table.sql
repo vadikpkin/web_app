@@ -1,3 +1,4 @@
+
 drop table if exists persons;
 drop table if exists ads;
 

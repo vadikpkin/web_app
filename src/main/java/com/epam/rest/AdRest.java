@@ -7,7 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/ad")
+@Path("/ads")
 public class AdRest {
 
     AdService adService = new AdService();
@@ -31,7 +31,6 @@ public class AdRest {
     }
 
     @GET
-    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAds(){
 

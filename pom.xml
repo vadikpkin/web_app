@@ -109,8 +109,8 @@
           <version>6.1.3</version>
           <configuration>
             <url>jdbc:postgresql://localhost:5432/ad_service</url>
-            <user>macbook</user>
-            <password>1234567</password>
+            <user>admin</user>
+            <password>password</password>
           </configuration>
           <dependencies>
             <dependency>

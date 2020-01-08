@@ -8,7 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/person")
+@Path("/persons")
 public class PersonRest {
 
     PersonService personService = new PersonService();
@@ -23,7 +23,6 @@ public class PersonRest {
     }
 
     @GET
-    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
 
@@ -32,7 +31,6 @@ public class PersonRest {
     }
 
     @POST
-    @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response insertPerson(Person person) {

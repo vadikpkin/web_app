@@ -30,6 +30,8 @@ public class PersonService {
 
     public Response getAllPersons() {
 
+        if (dao.getAllPersons().isEmpty()) return Response.status(404).build();
+
         return Response.status(200).entity(dao.getAllPersons()).build();
 
     }
@@ -38,7 +40,7 @@ public class PersonService {
 
         boolean isDeleted = dao.deletePerson(id);
 
-        return isDeleted ? Response.status(200).build() :
+        return isDeleted ? Response.status(204).build() :
                 Response.status(400).build();
     }
 
