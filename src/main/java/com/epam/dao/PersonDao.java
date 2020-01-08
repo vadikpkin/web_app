@@ -12,22 +12,19 @@ public class PersonDao implements PersonDaoInterface {
     @Override
     public Person getPerson(int id) {
 
-        Connection cn = ConnectionFactory.getConnection();
-
-        try {
-            Statement st = cn.createStatement();
-
-            ResultSet rs = st.executeQuery("SELECT * FROM persons WHERE id=" + id);
+        try (Connection cn = ConnectionFactory.getConnection();
+             Statement st = cn.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM persons WHERE id=" + id)) {
 
             while (rs.next()) {
                 Person person = new Person();
+                person.setId(id);
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
                 person.setEmail(rs.getString("email"));
                 person.setTypeOfCategory(Type.valueOf(rs.getString("type")));
                 return person;
             }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,23 +35,19 @@ public class PersonDao implements PersonDaoInterface {
     @Override
     public Set<Person> getAllPersons() {
 
-        Connection cn = ConnectionFactory.getConnection();
-
-        try {
-            Statement stmt = cn.createStatement();
-
-            ResultSet rs = stmt.executeQuery("SELECT * FROM persons");
+        try (Connection cn = ConnectionFactory.getConnection();
+             Statement stmt = cn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM persons")) {
 
             Set<Person> personSet = new HashSet<>();
 
             while (rs.next()) {
                 Person person = new Person();
-
+                person.setId(rs.getInt("id"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
                 person.setEmail(rs.getString("email"));
                 person.setTypeOfCategory(Type.valueOf(rs.getString("type")));
-
                 personSet.add(person);
             }
 
@@ -63,50 +56,21 @@ public class PersonDao implements PersonDaoInterface {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
         return null;
     }
 
     @Override
     public boolean insertPerson(Person person) {
 
-        Connection cn = ConnectionFactory.getConnection();
-
-        try {
-            PreparedStatement ps = cn.prepareStatement("INSERT INTO persons (name, surname, email, type) " +
-                    "VALUES (?, ?, ?, ?)");
+        try (Connection cn = ConnectionFactory.getConnection();
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO persons (name, surname, email, type) " +
+                     "VALUES (?, ?, ?, ?)")) {
             ps.setString(1, person.getName());
             ps.setString(2, person.getSurname());
             ps.setString(3, person.getEmail());
             ps.setString(4, String.valueOf(person.getTypeOfCategory()));
 
             int i = ps.executeUpdate();
-            if (i == 1) {
-                return true;
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean updatePerson(Person person, int id) {
-
-        Connection cn = ConnectionFactory.getConnection();
-
-        try {
-            PreparedStatement ps = cn.prepareStatement("UPDATE persons SET name=?, surname=?, email=?, type=? WHERE id=?");
-            ps.setString(1, person.getName());
-            ps.setString(2, person.getSurname());
-            ps.setString(3, person.getEmail());
-            ps.setString(4, String.valueOf(person.getTypeOfCategory()));
-            ps.setInt(5, id);
-
-            int i = ps.executeUpdate();
-
             if (i == 1) {
                 return true;
             }
@@ -121,12 +85,12 @@ public class PersonDao implements PersonDaoInterface {
     @Override
     public boolean deletePerson(int id) {
 
-        Connection cn = ConnectionFactory.getConnection();
+        try (Connection cn = ConnectionFactory.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM persons WHERE id=?")) {
 
-        try {
-            Statement stmt = cn.createStatement();
+            ps.setInt(1, id);
 
-            int i = stmt.executeUpdate("DELETE FROM persons WHERE id=" + id);
+            int i = ps.executeUpdate();
 
             if (i == 1) {
                 return true;
@@ -141,21 +105,22 @@ public class PersonDao implements PersonDaoInterface {
 
     @Override
     public int getId(Person person) {
-        Connection cn = ConnectionFactory.getConnection();
 
-        try {
-            PreparedStatement ps = cn.prepareStatement("SELECT id FROM persons WHERE name=? AND surname=? AND email=?" +
-                    " AND type=?");
+        try (Connection cn = ConnectionFactory.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT id FROM persons WHERE name=? AND surname=? AND email=?" +
+                     " AND type=?")) {
+
             ps.setString(1, person.getName());
             ps.setString(2, person.getSurname());
             ps.setString(3, person.getEmail());
             ps.setString(4, String.valueOf(person.getTypeOfCategory()));
 
-            ResultSet rs = ps.executeQuery();
+            try(ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                int a = rs.getInt("id");
-                return a;
+                while (rs.next()) {
+                    int a = rs.getInt("id");
+                    return a;
+                }
             }
 
         } catch (SQLException ex) {

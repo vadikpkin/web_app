@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    private static final String URL = "jdbc:postgresql:ad_service_db";
+    private static final String URL = "jdbc:postgresql://localhost:5432/ad_service";
     private static final String USER = "macbook";
     private static final String PASS = "1234567";
 
