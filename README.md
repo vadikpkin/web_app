@@ -12,3 +12,7 @@ git clone https://github.com/vadikpkin/web_app.git
 mvn flyway:migrate
 ```
 4 . deploy ad_service.war from root folder to Tomcat or other servlet container
+
+## Documentation
+
+check doc.html in root folder
