@@ -1,6 +1,5 @@
-
-drop table if exists persons;
 drop table if exists ads;
+drop table if exists persons;
 
 create table persons(
 id serial not null primary key,
