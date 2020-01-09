@@ -41,7 +41,7 @@ public class PersonService {
         boolean isDeleted = dao.deletePerson(id);
 
         return isDeleted ? Response.status(204).build() :
-                Response.status(400).build();
+                Response.status(404).build();
     }
 
 

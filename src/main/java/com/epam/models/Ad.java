@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@XmlRootElement
 @Data
 @NoArgsConstructor
 public class Ad {
