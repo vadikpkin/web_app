@@ -5,7 +5,7 @@
 ```
 git clone https://github.com/vadikpkin/web_app.git
 ```
-2 . run docker container from root folder
+2 . run docker container from root folder, that will create specific database on your 5432 port
 ```
 docker-compose up -d
 ```
