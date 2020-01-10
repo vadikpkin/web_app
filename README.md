@@ -5,11 +5,9 @@
 ```
 git clone https://github.com/vadikpkin/web_app.git
 ```
-2 . create PostgreSQL database called ad_service with user: admin , pass: password (TBA)
-
-3 . to migrate table type this from root folder
+2 . run docker container from root folder
 ```
-mvn flyway:migrate
+docker-compose up -d
 ```
 4 . deploy ad_service.war from root folder to Tomcat or other servlet container
 

@@ -47,5 +47,4 @@ public class PersonRest {
         return personService.deletePerson(id);
 
     }
-
 }

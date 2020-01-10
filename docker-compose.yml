@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.4
+    container_name: postgres
+    ports:
+        - 5432:5432
+    volumes:
+        - ./pgdata:/var/lib/postgresql/pgdata
+        - ./init:/docker-entrypoint-initdb.d
+    environment:
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_USER=admin
+        - POSTGRES_DB=ad_service
