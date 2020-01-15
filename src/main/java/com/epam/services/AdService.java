@@ -50,7 +50,7 @@ public class AdService {
 
         boolean isDeleted = dao.deleteAd(id);
 
-        return isDeleted ? Response.status(200).build() :
+        return isDeleted ? Response.status(204).build() :
                 Response.status(400).build();
     }
 
